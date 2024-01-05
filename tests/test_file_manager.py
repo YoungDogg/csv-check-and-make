@@ -1,19 +1,30 @@
+import sys
+import os
 from unittest.mock import patch, mock_open
 import unittest
-import file_manager
+
+# Add the src directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+src_dir = os.path.join(parent_dir, 'src')
+sys.path.insert(0, src_dir)
+
+import file_manager 
 from datetime import datetime
+
 
 class FileManagerTest(unittest.TestCase):
 
     def test_find_files(self):
         with patch('os.walk') as mock_walk:
             mock_walk.return_value = [
-                ('/path/to/files/2023/01/01', [], ['titles-original', 'otherfile.txt']),
-                ('/path/to/files/2023/01/02', [], ['titles-original', 'anotherfile.txt']),
+                (os.path.join('path', 'to', 'files', '2023', '01', '01'), [], ['titles-original', 'otherfile.txt']),
+                (os.path.join('path', 'to', 'files', '2023', '01', '02'), [], ['titles-original', 'anotherfile.txt']),
             ]
 
-            result = file_manager.find_files('/path/to/files', 'titles-original')
-            expected = ['/path/to/files/2023/01/01/titles-original', '/path/to/files/2023/01/02/titles-original']
+            result = file_manager.find_files(os.path.join('path', 'to', 'files'), 'titles-original')
+            expected = [os.path.join('path', 'to', 'files', '2023', '01', '01', 'titles-original'),
+                        os.path.join('path', 'to', 'files', '2023', '01', '02', 'titles-original')]
             self.assertEqual(result, expected)
 
     def test_extract_date_from_path(self):
