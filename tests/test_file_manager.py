@@ -28,12 +28,16 @@ class FileManagerTest(unittest.TestCase):
             self.assertEqual(result, expected)
 
     def test_extract_date_from_path(self):
-        path = '/path/to/files/2023/01/01/titles-original'
+        path = os.path.join('data', 'processed', '2023', '12', '23', '🤬#정신나간_남편20231223', 'titles-original') 
         result = file_manager.extract_date_from_path(path)
-        expected = '2023-01-01'
+        print('path: ' + path)
+        print('result: ')
+        print(result)
+        expected = '2023-12-23'
         self.assertEqual(result, expected)
 
-    def test_read_file(self):
+
+    def test_read_file(self): 
         mock_data = "Title 1, Title 2"
         with patch("builtins.open", mock_open(read_data=mock_data)):
             result = file_manager.read_file("dummy/path")

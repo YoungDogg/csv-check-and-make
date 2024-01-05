@@ -15,15 +15,21 @@ def find_files(base_path, file_name):
 def extract_date_from_path(path):
     """
     Extracts the date from the folder structure.
-    Assumes folder structure: .../year/month/day/...
+    Assumes folder structure includes: .../yyyy/mm/dd/...
     """
     parts = path.strip(os.sep).split(os.sep)
     try:
-        year, month, day = parts[-3], parts[-2], parts[-1]
-        return datetime(int(year), int(month), int(day)).strftime('%Y-%m-%d')
-    except ValueError:
+        # Find the year part (four digits) and assume the next two parts are month and day
+        for i, part in enumerate(parts):
+            if part.isdigit() and len(part) == 4:
+                year, month, day = parts[i], parts[i + 1], parts[i + 2]
+                print('year, month, day ->', year, month, day)
+                return datetime(int(year), int(month), int(day)).strftime('%Y-%m-%d')
+        # If year is not found or date is invalid, return None
+    except (ValueError, IndexError):
+        print('error: extract_date_from_path error for path:', path)
         return None
-
+    
 def read_file(file_path):
     """
     Reads the content of a file.
