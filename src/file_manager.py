@@ -8,6 +8,8 @@ def find_files(base_path, file_name):
     """
     files_found = []
     for root, dirs, files in os.walk(base_path):
+        # print('find_files: ')
+        # print(os.walk(base_path))
         if file_name in files:
             files_found.append(os.path.join(root, file_name))
     return files_found
@@ -23,7 +25,7 @@ def extract_date_from_path(path):
         for i, part in enumerate(parts):
             if part.isdigit() and len(part) == 4:
                 year, month, day = parts[i], parts[i + 1], parts[i + 2]
-                print('year, month, day ->', year, month, day)
+                # print('year, month, day ->', year, month, day)
                 return datetime(int(year), int(month), int(day)).strftime('%Y-%m-%d')
         # If year is not found or date is invalid, return None
     except (ValueError, IndexError):

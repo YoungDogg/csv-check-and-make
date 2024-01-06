@@ -18,21 +18,31 @@ class FileManagerTest(unittest.TestCase):
     def test_find_files(self):
         with patch('os.walk') as mock_walk:
             mock_walk.return_value = [
-                (os.path.join('path', 'to', 'files', '2023', '01', '01'), [], ['titles-original', 'otherfile.txt']),
-                (os.path.join('path', 'to', 'files', '2023', '01', '02'), [], ['titles-original', 'anotherfile.txt']),
+                (os.path.join('tests', 'data', 'processed', '12', '23', '🤬#정신나간_남편20231223-2'), [], ['titles-original.txt']),
+                (os.path.join('tests', 'data', 'processed', '12', '23', '🤬#정신나간_남편20231223'), [], ['titles-original.txt']),
+                (os.path.join('tests', 'data', 'processed', '12', '25', '👄#울끈불끈_신사전용20231225'), [], ['titles-original.txt']),
+                (os.path.join('tests', 'data', 'processed', '12', '25', '🤬#정신나간_남편20231225'), [], ['titles-original.txt']),
+                (os.path.join('tests', 'data', 'processed', '12', '26'), [], ['titles-original.txt'])
             ]
 
-            result = file_manager.find_files(os.path.join('path', 'to', 'files'), 'titles-original')
-            expected = [os.path.join('path', 'to', 'files', '2023', '01', '01', 'titles-original'),
-                        os.path.join('path', 'to', 'files', '2023', '01', '02', 'titles-original')]
+            base_path = os.path.join('tests', 'data', 'processed')
+            result = file_manager.find_files(base_path, 'titles-original.txt')
+            expected = [
+                os.path.join('tests', 'data', 'processed', '12', '23', '🤬#정신나간_남편20231223-2', 'titles-original.txt'),
+                os.path.join('tests', 'data', 'processed', '12', '23', '🤬#정신나간_남편20231223', 'titles-original.txt'),
+                os.path.join('tests', 'data', 'processed', '12', '25', '👄#울끈불끈_신사전용20231225', 'titles-original.txt'),
+                os.path.join('tests', 'data', 'processed', '12', '25', '🤬#정신나간_남편20231225', 'titles-original.txt'),
+                os.path.join('tests', 'data', 'processed', '12', '26', 'titles-original.txt')
+            ]
+
             self.assertEqual(result, expected)
 
     def test_extract_date_from_path(self):
         path = os.path.join('data', 'processed', '2023', '12', '23', '🤬#정신나간_남편20231223', 'titles-original') 
         result = file_manager.extract_date_from_path(path)
-        print('path: ' + path)
-        print('result: ')
-        print(result)
+        # print('path: ' + path)
+        # print('result: ')
+        # print(result)
         expected = '2023-12-23'
         self.assertEqual(result, expected)
 
